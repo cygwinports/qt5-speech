@@ -1,0 +1,46 @@
+inherit qt5-qmake
+
+NAME="qt5-speech"
+VERSION=5.9.2
+RELEASE=1
+CATEGORY="Libs"
+SUMMARY="Qt C++ application framework (TextToSpeech library)"
+DESCRIPTION="Qt is a cross-platform application framework for desktop and
+embedded development. Qt enables programmers to create advanced GUI
+applications once and deploy them to Windows, Mac OS X and Linux without
+rewriting the source code. Companies using Qt can leverage software
+investments made on one platform across many others."
+HOMEPAGE="https://www.qt.io/"
+SRC_URI="http://download.qt.io/official_releases/qt/${VERSION%.*}/${VERSION}/submodules/qtspeech-opensource-src-${VERSION}.tar.xz"
+SRC_DIR="qtspeech-opensource-src-${VERSION}"
+
+PKG_NAMES="libQt5TextToSpeech5 libQt5TextToSpeech-devel ${NAME}-doc ${NAME}-examples"
+libQt5TextToSpeech5_CONTENTS="
+	usr/bin/cygQt5TextToSpeech-5.dll
+	usr/lib/qt5/plugins/texttospeech/
+	usr/share/doc/
+"
+libQt5TextToSpeech_devel_CONTENTS="
+	usr/include/qt5/QtTextToSpeech/
+	usr/lib/cmake/Qt5TextToSpeech/
+	usr/lib/libQt5TextToSpeech.*
+	usr/lib/pkgconfig/Qt5TextToSpeech.pc
+	usr/lib/qt5/mkspecs/modules/qt_lib_texttospeech.pri
+	usr/lib/qt5/mkspecs/modules/qt_lib_texttospeech_private.pri
+"
+qt5_speech_doc_CATEGORY="X11"
+qt5_speech_doc_CONTENTS="usr/share/qt5/doc/qtspeech*"
+qt5_speech_examples_CATEGORY="X11"
+qt5_speech_examples_CONTENTS="usr/lib/qt5/examples/speech/"
+
+src_compile() {
+	cd ${B}
+	cygqmake5 ${S}
+	cygmake
+	cygmake docs
+}
+
+src_install() {
+	cd ${B}
+	qt5_qmake_install install_docs
+}
